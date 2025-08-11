@@ -327,11 +327,11 @@
 
     function initFirebase() {
       try {
-        if (!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.includes('SEU_')) {
+        if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes('SEU_')) {
           console.warn('Firebase não configurado — usando fallback localStorage.');
           return;
         }
-        firebase.initializeApp(FIREBASE_CONFIG);
+        firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
         useFirestore = true;
         console.log('Firebase iniciado. Usando Firestore.');

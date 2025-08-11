@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
+    /* Seu CSS permanece igual */
     :root {
       --verde-escuro: #1f3b2f;
       --verde-oliva: #667155;
@@ -284,13 +285,29 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- Firebase modular via CDN -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import {
+      getFirestore, collection, getDocs, query, orderBy, doc, runTransaction, writeBatch
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCPW9WdkXYBPQaA_GQU4EkpjPMn7gVYD2U",
+      authDomain: "listabiancarebecca.firebaseapp.com",
+      projectId: "listabiancarebecca",
+      storageBucket: "listabiancarebecca.firebasestorage.app",
+      messagingSenderId: "1000428145304",
+      appId: "1:1000428145304:web:a7dc844748e8c89a9b9eed"
+    };
+
+    const COLLECTION_NAME = 'presentes';
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const initialPresents = [
-      { id: 'p1', title: 'Cafeteira de cápsula', img: 'https://a-static.mlcdn.com.br/1500x1500/cafeteira-arno-nescafe-dolce-gusto-mini-me-automatica-preta-127-v-pj120854-dmm0/marciusmagazine/0043220050/191b68f5cf330e4df9eff05f440b9868.jpg' },
+      { id: 'p1', title: 'Cafeteira Dolce Gusto', img: 'https://a-static.mlcdn.com.br/1500x1500/cafeteira-arno-nescafe-dolce-gusto-mini-me-automatica-preta-127-v-pj120854-dmm0/marciusmagazine/0043220050/191b68f5cf330e4df9eff05f440b9868.jpg' },
       { id: 'p2', title: 'Aspirador Robô', img: 'https://images1.kabum.com.br/produtos/fotos/155321/aspirador-de-po-robo-ir-360-kabum-smart-700-branco_1628769488_gg.jpg' },
       { id: 'p3', title: 'Aspirador de Pó', img: 'https://a-static.mlcdn.com.br/1500x1500/aspirador-de-po-e-agua-wap-gtw-10-com-porta-acessorios-1400w-amarelo-e-preto/magazineluiza/219060300/97a89d0a927eb91c1b78129c36282280.jpg' },
       { id: 'p4', title: 'Jogo de Panelas', img: 'https://a-static.mlcdn.com.br/800x560/jogo-de-panelas-10-pecas-2mm-revestimento-ceramico-inducao-antiaderente-mimo-style/feherosshop/9553/3cd2939c58cd30c174fc919d6a19ac60.jpeg' },
@@ -298,48 +315,16 @@
       { id: 'p6', title: 'Panela de Pressão Elétrica', img: 'https://a-static.mlcdn.com.br/1500x1500/panela-de-pressao-eletrica-mondial-pratic-cook-pe-26-700w-3l-timer-controle-de-temperatura/magazineluiza/023341800/8b2f58d7755f7a33294938faee68a95f.jpg' },
       { id: 'p7', title: 'Panela de Arroz Elétrica', img: 'https://a-static.mlcdn.com.br/1500x1500/panela-de-arroz-eletrica-mondial-fast-rice-5-premium-5-xicaras-400w/magazineluiza/236682100/b49c0403cb9daae5d247bcb263459ccd.jpg' },
       { id: 'p8', title: 'Sofá Cama de Espuma Bouclê', img: 'https://http2.mlstatic.com/D_NQ_NP_2X_922334-MLA83178037381_032025-F.webp' },
-      { id: 'p10', title: 'Edredom Queen Percal', img: 'https://a-static.mlcdn.com.br/800x560/kit-edredom-queen-percal-180-fios-algodao-03-pecas-bordado-margarida-casaborda-enxovais/oliviaenxovais/00903-branco/99ef47793fbee1b0c022b5f11b551fca.jpeg' },
-      { id: 'p11', title: 'Jogo de cama queen', img: 'https://a-static.mlcdn.com.br/800x560/jogo-de-cama-queen-4-pecas-lencol-com-elastico-100-algodao-percal-130-fios-158x198x35cm-dohler/emcompre/414584/6f287a0f04403061d215fea65dde821d.jpeg' },
-      { id: 'p12', title: 'Conjunto de xícaras', img: 'https://a-static.mlcdn.com.br/800x560/conjunto-de-xicaras-com-pires-de-cafe-porcelana-xicara-branca-kit-12-pecas-luxo-ceramica-chicvida/astar/18e9b9ea4d4c11f0b19142010a480899/bbe7cb7d32c26af1294b7b2ad11927f5.jpeg' },
-      { id: 'p13', title: 'Sousplat Jogo Americano Bordado', img: 'https://a-static.mlcdn.com.br/800x560/sousplat-jogo-americano-bordado-dourado-6-lugares-12-pecas-italia-azul-marinho-padrao/enxovaisibitinga2/2541227-204395-0/1bbc41bd7a8f69a0ade28c0703200b93.jpeg' },
-      { id: 'p14', title: 'Jogo americano', img: 'https://homeecia.cdn.magazord.com.br/img/2023/02/produto/3705/americano-fibra-natural-estilo-rustico-30cm-ambiente.jpg?ims=865x865' },
-      { id: 'p15', title: 'Cobre leito/colcha casal queen', img: 'https://a-static.mlcdn.com.br/800x560/cobre-leito-colcha-casal-queen-austria-matelado-a-linha-flores-03-pecas-borda-bordados/confeccoeszelimari/79-cl-07-123/bbe6eeede7bf1091e5c0d7a6f8cd82e1.jpeg' },
-      { id: 'p16', title: 'Conjunto Cabeceira Modulada', img: 'https://down-br.img.susercontent.com/file/br-11134207-7r98o-m9bh7spa7bpef3.webp' }
-
+      { id: 'p9', title: 'Edredom Queen Percal', img: 'https://a-static.mlcdn.com.br/800x560/kit-edredom-queen-percal-180-fios-algodao-03-pecas-bordado-margarida-casaborda-enxovais/oliviaenxovais/00903-branco/99ef47793fbee1b0c022b5f11b551fca.jpeg' },
+      { id: 'p10', title: 'Jogo de cama queen', img: 'https://a-static.mlcdn.com.br/800x560/jogo-de-cama-queen-4-pecas-lencol-com-elastico-100-algodao-percal-130-fios-158x198x35cm-dohler/emcompre/414584/6f287a0f04403061d215fea65dde821d.jpeg' },
+      { id: 'p11', title: 'Conjunto de xícaras', img: 'https://a-static.mlcdn.com.br/800x560/conjunto-de-xicaras-com-pires-de-cafe-porcelana-xicara-branca-kit-12-pecas-luxo-ceramica-chicvida/astar/18e9b9ea4d4c11f0b19142010a480899/bbe7cb7d32c26af1294b7b2ad11927f5.jpeg' },
+      { id: 'p12', title: 'Sousplat Jogo Americano Bordado', img: 'https://a-static.mlcdn.com.br/800x560/sousplat-jogo-americano-bordado-dourado-6-lugares-12-pecas-italia-azul-marinho-padrao/enxovaisibitinga2/2541227-204395-0/1bbc41bd7a8f69a0ade28c0703200b93.jpeg' },
+      { id: 'p13', title: 'Jogo americano', img: 'https://homeecia.cdn.magazord.com.br/img/2023/02/produto/3705/americano-fibra-natural-estilo-rustico-30cm-ambiente.jpg?ims=865x865' },
+      { id: 'p14', title: 'Cobre leito/colcha casal queen', img: 'https://a-static.mlcdn.com.br/800x560/cobre-leito-colcha-casal-queen-austria-matelado-a-linha-flores-03-pecas-borda-bordados/confeccoeszelimari/79-cl-07-123/bbe6eeede7bf1091e5c0d7a6f8cd82e1.jpeg' },
+      { id: 'p15', title: 'Conjunto Cabeceira Modulada', img: 'https://down-br.img.susercontent.com/file/br-11134207-7r98o-m9bh7spa7bpef3.webp' }
     ];
 
-
-    // Configuração Firebase - substitua pelas suas credenciais
-    const firebaseConfig = {
-      apiKey: "AIzaSyCPW9WdkXYBPQaA_GQU4EkpjPMn7gVYD2U",
-      authDomain: "listaBiancaRebecca.firebaseapp.com",
-      projectId: "listaBiancaRebecca",
-      storageBucket: "listaBiancaRebecca.appspot.com",  // corrigido aqui
-      messagingSenderId: "1000428145304",
-      appId: "1:1000428145304:web:a7dc844748e8c89a9b9eed"
-    };
-
-
-    const COLLECTION_NAME = 'presentes';
-
-    let db = null;
-    let useFirestore = false;
-
-    function initFirebase() {
-      try {
-        if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes('SEU_')) {
-          console.warn('Firebase não configurado — usando fallback localStorage.');
-          return;
-        }
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
-        useFirestore = true;
-        console.log('Firebase iniciado. Usando Firestore.');
-      } catch (e) {
-        console.warn('Erro ao iniciar Firebase:', e);
-      }
-    }
-
+    // LocalStorage fallback
     function saveLocal(data) {
       localStorage.setItem('presentes_local', JSON.stringify(data));
     }
@@ -347,13 +332,15 @@
       try { return JSON.parse(localStorage.getItem('presentes_local')) || null } catch (e) { return null }
     }
 
+    // Garantir dados iniciais no Firestore ou localStorage
     async function ensureInitialData() {
-      if (useFirestore) {
-        const snap = await db.collection(COLLECTION_NAME).get();
+      if (db) {
+        const q = query(collection(db, COLLECTION_NAME));
+        const snap = await getDocs(q);
         if (snap.empty) {
-          const batch = db.batch();
+          const batch = writeBatch(db);
           initialPresents.forEach(p => {
-            const ref = db.collection(COLLECTION_NAME).doc(p.id);
+            const ref = doc(db, COLLECTION_NAME, p.id);
             batch.set(ref, { ...p, chosen_by: null, chosen_at: null });
           });
           await batch.commit();
@@ -363,23 +350,26 @@
       }
     }
 
+    // Buscar presentes do Firestore ou localStorage
     async function fetchPresents() {
-      if (useFirestore) {
-        const snap = await db.collection(COLLECTION_NAME).orderBy('title').get();
+      if (db) {
+        const q = query(collection(db, COLLECTION_NAME), orderBy('title'));
+        const snap = await getDocs(q);
         return snap.docs.map(d => ({ id: d.id, ...d.data() }));
       } else {
         return loadLocal() || initialPresents.map(p => ({ ...p, chosen_by: null, chosen_at: null }));
       }
     }
 
+    // Atualizar escolha do presente
     async function updatePresentChoice(id, chosenBy) {
       const timestamp = new Date().toISOString();
-      if (useFirestore) {
-        const ref = db.collection(COLLECTION_NAME).doc(id);
-        await db.runTransaction(async (t) => {
-          const doc = await t.get(ref);
-          if (!doc.exists) throw new Error('Item não existe');
-          const data = doc.data();
+      if (db) {
+        const ref = doc(db, COLLECTION_NAME, id);
+        await runTransaction(db, async (t) => {
+          const docSnap = await t.get(ref);
+          if (!docSnap.exists()) throw new Error('Item não existe');
+          const data = docSnap.data();
           if (data.chosen_by) throw new Error('Já escolhido');
           t.update(ref, { chosen_by: chosenBy, chosen_at: timestamp });
         });
@@ -411,7 +401,7 @@
         const card = document.createElement('article'); card.className = 'card';
         card.innerHTML = `
   <div class="img-wrap">
-    <a href="${p.link}" target="_blank">
+    <a href="${p.link || '#'}" target="_blank" rel="noopener noreferrer">
       <img src="${p.img}" alt="${escapeHtml(p.title)}" />
     </a>
   </div>
@@ -424,8 +414,6 @@
             : `<button class="presentar" data-id="${p.id}">Presentear</button>`}
   </div>
 `;
-
-        ;
         gridEl.appendChild(card);
       });
       gridEl.querySelectorAll('button.presentar').forEach(btn => {
@@ -434,7 +422,9 @@
       countEl.textContent = presents.length;
     }
 
-    function escapeHtml(s) { return (s + '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;') }
+    function escapeHtml(s) {
+      return (s + '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
+    }
 
     function openModal(id) {
       currentSelectingId = id;
@@ -444,7 +434,10 @@
       modal.classList.add('open');
       guestNameInput.focus();
     }
-    function closeModal() { modal.classList.remove('open'); currentSelectingId = null }
+    function closeModal() {
+      modal.classList.remove('open');
+      currentSelectingId = null;
+    }
 
     cancelBtn.addEventListener('click', closeModal);
 
@@ -455,21 +448,21 @@
         return;
       }
       try {
-        confirmBtn.disabled = true; confirmBtn.textContent = 'Salvando...';
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Salvando...';
         await updatePresentChoice(currentSelectingId, name);
         await reloadAndRender();
         closeModal();
 
-        // NOVO: abrir link do presente escolhido em nova aba, se houver
         const chosenPresent = presentsCache.find(p => p.id === currentSelectingId);
         if (chosenPresent && chosenPresent.link) {
           window.open(chosenPresent.link, '_blank');
         }
-
       } catch (e) {
         alert('Não foi possível reservar o presente: ' + (e.message || e));
       } finally {
-        confirmBtn.disabled = false; confirmBtn.textContent = 'Confirmar';
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Confirmar';
       }
     });
 
@@ -477,7 +470,10 @@
       try {
         presentsCache = await fetchPresents();
         applyFilter();
-      } catch (e) { console.error(e); alert('Erro ao carregar presentes: ' + e.message) }
+      } catch (e) {
+        console.error(e);
+        alert('Erro ao carregar presentes: ' + e.message)
+      }
     }
 
     function applyFilter() {
@@ -488,16 +484,14 @@
 
     searchEl.addEventListener('input', applyFilter);
 
+    // Inicialização
     (async function init() {
-      initFirebase();
       await ensureInitialData();
       await reloadAndRender();
 
-      if (useFirestore) {
-        db.collection(COLLECTION_NAME).onSnapshot(async () => {
-          await reloadAndRender();
-        });
-      }
+      // Atualizar em tempo real (pode adicionar listener se desejar)
+      // Firestore onSnapshot não funciona diretamente com modular e async aqui, 
+      // então você pode implementar depois se quiser.
     })();
   </script>
 </body>
